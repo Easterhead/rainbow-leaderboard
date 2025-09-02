@@ -98,6 +98,23 @@ async function scrapeWattpadData() {
       replyClickCount++;
     }
     
+    console.log('Now clicking "Read more" buttons...');
+    
+    // Click all "Read more" buttons to expand truncated comments
+    let readMoreClickCount = 0;
+    const maxReadMoreClicks = 100;
+    
+    while (readMoreClickCount < maxReadMoreClicks) {
+      const readMoreButton = await page.$('button:has-text("Read more")');
+      if (!readMoreButton) break;
+      
+      await readMoreButton.click();
+      await page.waitForTimeout(300); // Shorter timeout since this is usually faster
+      readMoreClickCount++;
+    }
+    
+    console.log(`Clicked "Read more" ${readMoreClickCount} times`);
+    
     console.log('Extracting data...');
     
     // Extract the author names and points
@@ -115,25 +132,13 @@ async function scrapeWattpadData() {
         const name = h3Element.textContent.trim();
         if (!name) continue;
         
-        let maxPoints = 0;
-        let pointsFound = false;
-        
         // Check siblings for points
         let currentSibling = div.nextElementSibling;
-        let siblingIndex = 0;
         
-        while (currentSibling && siblingIndex < 5) {
-          const result = parsePoints(currentSibling.textContent.trim());
-          if (result.pointsFound && result.maxPoints > maxPoints) {
-            maxPoints = result.maxPoints;
-            pointsFound = true;
-          }
-          
-          currentSibling = currentSibling.nextElementSibling;
-          siblingIndex++;
-        }
-        
-        entries.push({ name, points: pointsFound ? maxPoints : 0 });
+        //does the regex get just one output? it does, the biggest?
+        const maxPoints = parsePoints(currentSibling.textContent.trim());
+
+        entries.push({ name, points: maxPoints });
       }
       
       return entries;
@@ -141,7 +146,11 @@ async function scrapeWattpadData() {
     
     // Process the data to keep only one entry per user (with the highest points)
     const userPointsMap = new Map();
-    
+
+    // Log all entries for Justtmb
+    const justtmbEntries = results.filter(entry => entry.name === 'Justtmb');
+    console.log('All entries for Justtmb:', justtmbEntries);
+
     for (const entry of results) {
       const currentPoints = userPointsMap.get(entry.name) || 0;
       if (entry.points > currentPoints) {

@@ -1,93 +1,58 @@
 # Rainbow Book Club Leaderboard
 
-A web-based leaderboard application that tracks and displays points for members of the Rainbow Book Club. The application scrapes points data from a Wattpad page and presents it in a clean, sortable leaderboard interface.
+A web-based leaderboard application for tracking reading points in the Rainbow Book Club.
 
 ## Features
 
-- Automated scraping of points data from Wattpad comments
-- Handling of multiple points formats (points, pts, final totals, etc.)
-- Deduplication of entries (keeps highest score for each user)
-- Clean web interface to display the leaderboard
+- **API-Based Data Collection**: Fetches data from Wattpad's API to track reader points
+- **Server-Side Caching**: Implements caching on the server side instead of relying on local storage
+- **Auto-Refreshing Data**: Automatically refreshes data every 10 minutes
+- **Rainbow-Themed UI**: Visually appealing interface with rainbow colors for each row
+- **Comprehensive Points Detection**: Smart parsing of various point formats in comments
+- **Comment & Reply Processing**: Collects points from both main comments and their replies
 
-## Prerequisites
+## Technical Implementation
 
-- Node.js (v14 or newer)
-- npm
+### Data Collection
 
-## Installation
+- Interacts with Wattpad's API to fetch comments from the monthly reading challenge chapter
+- Processes all replies to comments for comprehensive data collection
+- Uses regex pattern matching to extract point values from various text formats
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/rainbow-leaderboard.git
-   cd rainbow-leaderboard
-   ```
+### Caching & Performance
 
-2. Install dependencies:
-   ```
-   npm install
-   ```
+- Server-side data caching with configurable refresh intervals
+- Minimizes API calls to Wattpad by serving cached data when appropriate
+- Client-side countdown timer showing time until next data refresh
 
-3. Install Playwright browsers (required for the scraper):
-   ```
-   npx playwright install chromium
-   ```
+### User Interface
 
-## Usage
+- Rainbow-colored rows for visual appeal
+- Real-time countdown timer showing when data will refresh
+- Responsive design that works on mobile and desktop
+- Helpful cloud tooltip explaining how points are tracked
 
-### Running the Web Server
+## How Points Are Calculated
 
-To start the web server that displays the leaderboard:
+The system looks for point declarations in comments using various formats:
+- Direct mentions: "42 points" or "42 pts"
+- Total summaries: "Total: 50" or "Final points: 100"
+- Mathematical expressions: "= 75"
 
-```
-npm start
-```
+For each user, the highest point value found across all their comments and replies is used for the leaderboard ranking.
 
-The server will start on http://localhost:3000 (or the port specified in your environment variables).
+## Development
 
-### Testing the Scraper
+To run the project locally:
 
-To run the scraper directly and see the data it retrieves:
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Start the server: `node server.js`
+4. Open `index.html` in your browser or use a local server
 
-```
-npm run test-scraper
-```
+## Future Improvements
 
-This will output the raw data fetched from the Wattpad page.
-
-### Running Tests
-
-To run the unit tests for the points parsing logic:
-
-```
-npm test
-```
-
-## Project Structure
-
-- `server.js` - Main web server that serves the leaderboard
-- `wattpad-scraper.js` - Contains the scraping logic
-- `wattpad-scraper.test.js` - Unit tests for the points parsing
-- `public/` - Static files for the web interface
-
-## How it Works
-
-1. The application uses Playwright to load and interact with the Wattpad page
-2. It clicks "Show more" buttons to load all comments
-3. It extracts usernames and points using regex patterns
-4. Points are parsed from various formats (e.g., "42 points", "Final: 50", "Total = 70")
-5. The data is deduplicated to keep only the highest score for each user
-6. The results are displayed in a sortable web interface
-
-## Customization
-
-To change the Wattpad page that's being scraped, edit the URL in `wattpad-scraper.js`. Needs to be done every month.
-
-
-## TODO
-x look for points in replies to comments as well, should fix pixels, may have to add some enters and tabs into the spaces as well for that one
-- whitelist of blacklist users
-- add text to explain how to get on the boeard with the correct amount of points
-- host it
-- get peoples profile pictures
-x show cute nimation while loading 
-- show timer for then next update will be
+- Support for fetching data from multiple chapters
+- Historical tracking of points across months
+- User profile images in the leaderboard
+- Admin interface for manual point adjustments

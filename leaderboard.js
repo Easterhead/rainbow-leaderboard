@@ -1,7 +1,7 @@
 // Global variables for the timer
 let countdownInterval;
 let lastRefreshTime;
-const REFRESH_INTERVAL = 60 * 60 * 1000; // 1 hour in milliseconds
+const REFRESH_INTERVAL = 10 * 60 * 1000; // 10 minutes in milliseconds (changed from 60 minutes)
 
 // Function to fetch data from our server that runs Playwright
 function fetchLeaderboardData() {
@@ -12,9 +12,16 @@ function fetchLeaderboardData() {
     loadingContainer.style.display = 'flex';
     leaderboardTable.style.display = 'none';
     
+    // Set up a 2-minute timeout for the fetch request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 120000); // 2 minutes
+    
     // Call our backend server that runs the Playwright script
-    return fetch('http://localhost:3000/api/leaderboard')
+    return fetch('http://localhost:3000/api/leaderboard', {
+        signal: controller.signal
+    })
         .then(response => {
+            clearTimeout(timeoutId); // Clear the timeout
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -35,6 +42,10 @@ function fetchLeaderboardData() {
             leaderboardTable.style.display = 'table';
             
             return data;
+        })
+        .catch(error => {
+            clearTimeout(timeoutId); // Clear the timeout on error too
+            throw error;
         });
 }
 
@@ -149,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
             startCountdownTimer();
             
             // Try to load cached data
-            const cachedData = localStorage.getItem('leaderboardData');
+            const cachedData = false; //localStorage.getItem('leaderboardData');
             if (cachedData) {
                 renderLeaderboard(JSON.parse(cachedData));
             } else {

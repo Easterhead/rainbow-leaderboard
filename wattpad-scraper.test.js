@@ -208,4 +208,35 @@ describe('parsePointsFromText', () => {
     expect(result.pointsFound).toBe(true);
     expect(result.maxPoints).toBe(24); // Should pick 24 as the highest value
   });
+
+  test('should handle string with newline at end', () => {
+    const text = "Total points for August: 1634\n";
+    
+    const result = parsePointsFromText(text);
+    
+    expect(result.pointsFound).toBe(true);
+    expect(result.maxPoints).toBe(1634);
+  });
+
+  test('should handle complex reading list with calculations and final total', () => {
+    const text = `I have read chapters 1-23 of "Mirror, Mirror" by @CemeteryFaerie (23 chapters); 
+And chapters 1-32 of "Once in A Blue Moon" by @CemeteryFaerie (32 chapters).
+
+Rainbows category; 3 points. 
+
+55 chapters × 3 = 165
+
+I have read chapters 12.1-12.9 of "A Failure of A High Elf" by @erifnidne (9 chapters).
+
+Mods category; 4 points. 
+
+9 chapters × 4 = 36
+
+Total points for August: 1634`;
+    
+    const result = parsePointsFromText(text);
+    
+    expect(result.pointsFound).toBe(true);
+    expect(result.maxPoints).toBe(1634); // Should pick 1634 as the highest value
+  });
 });
