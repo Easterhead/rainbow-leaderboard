@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rainbow Book club Leaderboard!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Bubblegum+Sans&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="leaderboard.js"></script>
+</head>
+<body>
+    <h1>🌈 Rainbow Book Club Leaderboard 📚</h1>
+    
+    <div class="leaderboard">
+        <div class="controls">
+            <!-- Replace the refresh button with a countdown timer -->
+            <div class="refresh-timer">
+                <div class="timer-icon">⏱️</div>
+                <div class="timer-text">
+                    <span>Next update in:</span>
+                    <div class="countdown" id="countdown-timer">
+                        <span id="minutes">60</span>:<span id="seconds">00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Awesome Reader</th>
+                    <th>Magic Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table content will be populated by JavaScript -->
+            </tbody>
+        </table>
+        <div class="leaderboard-footer">
+            <p>Reading books is magical! 🦄 Keep going!</p>
+        </div>
+    </div>
+
+    <!-- Add this HTML to your leaderboard page -->
+    <div class="loading-container">
+      <div class="rainbow-loader">
+        <div class="rainbow-arc"></div>
+        <div class="cloud cloud-left">☁️</div>
+        <div class="cloud cloud-right">☁️</div>
+        <div class="unicorn">🦄</div>
+      </div>
+      <p class="loading-text">Loading magical rainbow data...</p>
+    </div>
+
+    <!-- Add this to your index.html file, right after the container div or before closing body tag -->
+    <div class="info-cloud">
+      <div class="cloud-shape"></div>
+      <div class="cloud-content">
+        <p>Are your points not correct? Make a comment on the chapter for the month with your total points, for example like:</p>
+        <p class="example"><strong>Total: 69 points!</strong></p>
+        <p>and it will show up in the board! Log your running total for it to show as well :)</p>
+      </div>
+    </div>
+</body>
+</html>
