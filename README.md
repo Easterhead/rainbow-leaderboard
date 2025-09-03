@@ -54,5 +54,19 @@ To run the project locally:
 
 - User profile images in the leaderboard
 
+## run vercel locally
+npx vercel dev
+
+## now
+- which server code is run when now? The nodejs code doesn't seem to be run when opening index.html in the browser.
+
 ## todo
-- change the code so we can deploy with vercel, have tested the fast and sloppy way and it didn't work. Maybe wait with this.
+x change the code so we can deploy with vercel, have tested the fast and sloppy way and it didn't work. Maybe wait with this.
+- Make variebles of the url to the chapter and the id of the chapter to use in the calls to watt
+- Buy domain to get rid of the vercel.app url
+- Print out the month at the head of the board
+- See if we can make it embed when linked, so it shows the rainbow explosion but smaller
+- Something with the countdown isn't makeing sense, it should be handled in the backend only now the countdown resets as we reload, it shouldn't
+- Add cute rainbow in browser tab header thingy
+
+

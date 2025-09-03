@@ -1,9 +1,12 @@
+const config = require('../config');
 const { fetchWattpadData } = require('../wattpad-api');
+
+// Use config for cache duration
+const CACHE_DURATION = config.refreshInterval;
 
 // Store the data in memory (note: this will reset between function invocations)
 let cachedData = null;
 let lastFetchTime = null;
-const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
 
 /**
  * Serverless function handler for /api/leaderboard

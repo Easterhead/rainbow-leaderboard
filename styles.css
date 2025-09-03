@@ -436,3 +436,65 @@ td:last-child::after {
         width: auto;
     }
 }
+
+/* Month display styles */
+.month-display {
+    text-align: center;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+.current-month {
+    display: inline-block;
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.8rem; /* Increased from 1.4rem */
+    color: #5c4694;
+    background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+    padding: 8px 25px; /* Slightly larger padding */
+    border-radius: 30px;
+    box-shadow: 0 3px 10px rgba(92, 70, 148, 0.3), 0 0 5px rgba(255, 255, 255, 0.8); /* Enhanced shadow */
+    border: 2px dashed #ffcc00; /* Thicker border */
+    position: relative;
+    animation: sparkle 2s infinite alternate;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+}
+
+/* Add sparkly effect with pseudo-elements */
+.current-month::before,
+.current-month::after {
+    content: "✨";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+}
+
+.current-month::before {
+    left: -5px;
+    animation: floatLeft 3s ease-in-out infinite;
+}
+
+.current-month::after {
+    right: -5px;
+    animation: floatRight 3s ease-in-out infinite;
+}
+
+/* Animations for sparkly effects */
+@keyframes sparkle {
+    0% {
+        box-shadow: 0 3px 10px rgba(92, 70, 148, 0.3), 0 0 5px rgba(255, 255, 255, 0.8);
+    }
+    100% {
+        box-shadow: 0 3px 15px rgba(92, 70, 148, 0.5), 0 0 10px rgba(255, 204, 0, 0.5);
+    }
+}
+
+@keyframes floatLeft {
+    0%, 100% { transform: translate(0, -50%); }
+    50% { transform: translate(-3px, -50%); }
+}
+
+@keyframes floatRight {
+    0%, 100% { transform: translate(0, -50%); }
+    50% { transform: translate(3px, -50%); }
+}

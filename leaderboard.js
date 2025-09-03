@@ -1,7 +1,7 @@
 // Global variables for the timer
 let countdownInterval;
 let lastRefreshTime;
-const REFRESH_INTERVAL = 10 * 60 * 1000; // 10 minutes in milliseconds (changed from 60 minutes)
+const REFRESH_INTERVAL = 10 * 60 * 1000; // 10 minutes in milliseconds
 
 // Function to fetch data from our server that runs Playwright
 function fetchLeaderboardData() {
@@ -17,15 +17,17 @@ function fetchLeaderboardData() {
     const timeoutId = setTimeout(() => controller.abort(), 120000); // 2 minutes
     
     // Determine if we're running locally or in production
+    // Include check for file:// protocol which is used when opening HTML directly
     const isLocalhost = 
+        window.location.protocol === 'file:' || 
         window.location.hostname === 'localhost' || 
         window.location.hostname === '127.0.0.1' ||
         window.location.hostname.includes('192.168.');
     
     // Use local URL in development, production URL in cloud
-    const apiUrl = isLocalhost
-        ? 'http://localhost:3000/api/leaderboard'
-        : 'https://rainbow-leaderboard.vercel.app/api/leaderboard';
+    const apiUrl = isLocalhost 
+        ? `${config.localApiUrl}/leaderboard`
+        : `${config.apiBaseUrl}/leaderboard`;
     
     console.log(`Fetching data from: ${apiUrl}`);
     
@@ -158,6 +160,21 @@ function startCountdownTimer() {
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing...');
+    
+    // Set the current month from config
+    try {
+        const currentMonthElement = document.getElementById('current-month');
+        if (currentMonthElement && window.config) {
+            currentMonthElement.textContent = `${config.currentMonth} ${config.currentYear}`;
+        } else if (currentMonthElement) {
+            // Fallback if config is not available
+            currentMonthElement.textContent = 'September 2025';
+        }
+    } catch (error) {
+        console.error('Error setting month:', error);
+    }
+    
     // Check if we have a saved refresh time
     lastRefreshTime = localStorage.getItem('lastRefreshTime');
     
@@ -165,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const now = new Date().getTime();
         const nextRefreshTime = parseInt(lastRefreshTime) + REFRESH_INTERVAL;
         
-        // If it's been more than an hour since the last refresh, fetch new data
+        // If it's been more than the refresh interval since the last refresh, fetch new data
         if (now >= nextRefreshTime) {
             fetchLeaderboardData()
                 .then(renderLeaderboard)

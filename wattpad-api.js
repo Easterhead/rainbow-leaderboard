@@ -1,4 +1,5 @@
 const axios = require('axios');
+const config = require('./config');
 
 /**
  * Parses text content to find the highest point value
@@ -143,7 +144,7 @@ async function fetchAllRepliesAndReturnAllComments(comments) {
 }
 
 async function fetchWattpadData() {
-  const url = 'https://www.wattpad.com/v5/comments/namespaces/parts/resources/1564485447/comments?limit=1000';
+  const url = `https://www.wattpad.com/v5/comments/namespaces/parts/resources/${config.chapterId}/comments?limit=1000`;
   
   try {
     const response = await axios.get(url);
