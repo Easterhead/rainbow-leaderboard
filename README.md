@@ -52,7 +52,7 @@ To run the project locally:
 
 ## Future Improvements
 
-- Support for fetching data from multiple chapters
-- Historical tracking of points across months
 - User profile images in the leaderboard
-- Admin interface for manual point adjustments
+
+## todo
+- change the code so we can deploy with vercel, have tested the fast and sloppy way and it didn't work. Maybe wait with this.
