@@ -16,8 +16,21 @@ function fetchLeaderboardData() {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 120000); // 2 minutes
     
-    // Call our backend server that runs the Playwright script
-    return fetch('http://localhost:3000/api/leaderboard', {
+    // Determine if we're running locally or in production
+    const isLocalhost = 
+        window.location.hostname === 'localhost' || 
+        window.location.hostname === '127.0.0.1' ||
+        window.location.hostname.includes('192.168.');
+    
+    // Use local URL in development, production URL in cloud
+    const apiUrl = isLocalhost
+        ? 'http://localhost:3000/api/leaderboard'
+        : 'https://rainbow-leaderboard.vercel.app/api/leaderboard';
+    
+    console.log(`Fetching data from: ${apiUrl}`);
+    
+    // Call our API endpoint
+    return fetch(apiUrl, {
         signal: controller.signal
     })
         .then(response => {
@@ -45,6 +58,11 @@ function fetchLeaderboardData() {
         })
         .catch(error => {
             clearTimeout(timeoutId); // Clear the timeout on error too
+            console.error('Error fetching data:', error);
+            
+            // Show error message in the UI
+            showErrorMessage();
+            
             throw error;
         });
 }
