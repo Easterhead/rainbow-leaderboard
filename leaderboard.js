@@ -75,13 +75,12 @@ function renderLeaderboard(data) {
     tbody.innerHTML = ''; // Clear existing content
     
     // Sort data by points (highest first)
-    data.sort((a, b) => b.points - a.points);
-    
+    const sortedData = [...data].sort((a, b) => b.points - a.points);
     // Create a rainbow gradient with enough colors for all entries
-    const hueIncrement = 360 / (data.length || 1);
-    
+    const hueIncrement = 360 / (sortedData.length || 1);
+
     // Render each entry
-    data.forEach((entry, index) => {
+    sortedData.forEach((entry, index) => {
         const row = document.createElement('tr');
         
         // Set rainbow background based on position, but with less intensity
