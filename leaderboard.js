@@ -69,22 +69,51 @@ function fetchLeaderboardData() {
         });
 }
 
-// Function to render the leaderboard
+// Function to render the leaderboard with the data
 function renderLeaderboard(data) {
-    const tableBody = document.querySelector('.leaderboard tbody');
-    tableBody.innerHTML = ''; // Clear existing rows
+    const tbody = document.querySelector('.leaderboard tbody');
+    tbody.innerHTML = ''; // Clear existing content
     
-    // Sort by points (highest first)
-    const sortedData = [...data].sort((a, b) => b.points - a.points);
+    // Sort data by points (highest first)
+    data.sort((a, b) => b.points - a.points);
     
-    // Add rows to the table
-    sortedData.forEach(member => {
+    // Create a rainbow gradient with enough colors for all entries
+    const hueIncrement = 360 / (data.length || 1);
+    
+    // Render each entry
+    data.forEach((entry, index) => {
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${member.name}</td>
-            <td>${member.points}</td>
-        `;
-        tableBody.appendChild(row);
+        
+        // Set rainbow background based on position, but with less intensity
+        // Changed from gradient to solid color with lower opacity
+        const hue = index * hueIncrement;
+        row.style.background = `hsla(${hue}, 100%, 90%, 0.3)`;
+        
+        // Add medal/trophy for top 3
+        let medal = '';
+        if (index === 0) {
+            medal = '🏆 '; // Gold trophy for 1st place
+        } else if (index === 1) {
+            medal = '🥈 '; // Silver medal for 2nd place
+        } else if (index === 2) {
+            medal = '🥉 '; // Bronze medal for 3rd place
+        }
+        
+        // Create the cells
+        const nameCell = document.createElement('td');
+        nameCell.className = 'member-name';
+        nameCell.innerHTML = `${medal}${entry.name}`;
+        
+        const pointsCell = document.createElement('td');
+        pointsCell.className = 'member-points';
+        pointsCell.textContent = entry.points;
+        
+        // Add cells to the row
+        row.appendChild(nameCell);
+        row.appendChild(pointsCell);
+        
+        // Add the row to the table
+        tbody.appendChild(row);
     });
 }
 

@@ -229,11 +229,6 @@ tr:nth-child(7n+7) td {
     font-size: 40px;
 }
 
-/* Add book emoji to the table */
-td:first-child::before {
-    content: "📚 ";
-}
-
 /* Points sparkle effect */
 td:last-child::after {
     content: " ✨";

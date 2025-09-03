@@ -47,8 +47,12 @@ module.exports = async (req, res) => {
       console.log('Serving cached data...');
     }
     
-    // Return the data as JSON
-    return res.status(200).json(cachedData);
+    // Return the data AND the lastRefreshTime and refreshInterval
+    return res.status(200).json({
+      data: cachedData,
+      lastRefreshTime: lastFetchTime,
+      refreshInterval: CACHE_DURATION
+    });
   } catch (error) {
     console.error('Error handling request:', error);
     return res.status(500).json({ error: 'Failed to fetch data' });
