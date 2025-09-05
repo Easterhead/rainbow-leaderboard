@@ -4,42 +4,20 @@ A web-based leaderboard application for tracking reading points in the Rainbow B
 
 ## Features
 
-- **API-Based Data Collection**: Fetches data from Wattpad's API to track reader points
-- **Server-Side Caching**: Implements caching on the server side instead of relying on local storage
-- **Auto-Refreshing Data**: Automatically refreshes data every 10 minutes
-- **Rainbow-Themed UI**: Visually appealing interface with rainbow colors for each row
-- **Comprehensive Points Detection**: Smart parsing of various point formats in comments
-- **Comment & Reply Processing**: Collects points from both main comments and their replies
+- **API-Based Data Collection**: Fetches data from Wattpad's API(all comments on this months chapter) to track reader points
+- **Server-Side Caching**: Implements caching on the server side instead of relying on local storage (this makes is we only do one call every 10 minutes to watt instead of every client (person looking at the board) does it's on.)
+- **Comprehensive Points Detection**: Smart(XD) parsing of various point formats in comments (It's just an ugly ass regex basically)
 
-## Technical Implementation
+## Maintinence
 
-### Data Collection
+In config.js we collect all the variables that change, like the id of the chapter and the link to it. These have to be updated every month manually.
 
-- Interacts with Wattpad's API to fetch comments from the monthly reading challenge chapter
-- Processes all replies to comments for comprehensive data collection
-- Uses regex pattern matching to extract point values from various text formats
+## Where stuff is
 
-### Caching & Performance
-
-- Server-side data caching with configurable refresh intervals
-- Minimizes API calls to Wattpad by serving cached data when appropriate
-- Client-side countdown timer showing time until next data refresh
-
-### User Interface
-
-- Rainbow-colored rows for visual appeal
-- Real-time countdown timer showing when data will refresh
-- Responsive design that works on mobile and desktop
-- Helpful cloud tooltip explaining how points are tracked
-
-## How Points Are Calculated
-
-The system looks for point declarations in comments using various formats:
-- Direct mentions: "42 points" or "42 pts"
-- Total summaries: "Total: 50" or "Final points: 100"
-- Mathematical expressions: "= 75"
-
-For each user, the highest point value found across all their comments and replies is used for the leaderboard ranking.
+- the **.vercel** folder is for vercel stuff (the service we use to host)
+- the **api** folder is for the serverless backend vercel routes
+- the **tests** folder contains all tests, both on frontend, backend end to end etc
+- the **public** folder is for all frontend things, like index.html and styles.css that contain all html and css respectively.
 
 ## Development
 
@@ -47,26 +25,20 @@ To run the project locally:
 
 1. Clone the repository
 2. Install dependencies: `npm install`
-3. Start the server: `node server.js`
-4. Open `index.html` in your browser or use a local server
+3. Install Vercel CLI globally: `npm install -g vercel`
+4. Run the Vercel development environment: `npx vercel dev`
+5. Open the local URL shown in your terminal (typically http://localhost:3000)
 
-## Future Improvements
-
-- User profile images in the leaderboard
-
-## run vercel locally
-npx vercel dev
-
-## now
-- which server code is run when now? The nodejs code doesn't seem to be run when opening index.html in the browser.
+This approach runs both the frontend and serverless API functions together, exactly as they'll work in production.
 
 ## todo
-x change the code so we can deploy with vercel, have tested the fast and sloppy way and it didn't work. Maybe wait with this.
-x Make variebles of the url to the chapter and the id of the chapter to use in the calls to watt
-- Buy domain to get rid of the vercel.app url
-x Print out the month at the head of the board
++ Buy domain to get rid of the vercel.app url
 - See if we can make it embed when linked, so it shows the rainbow explosion but smaller
-- Something with the countdown isn't makeing sense, it should be handled in the backend only now the countdown resets as we reload, it shouldn't
-x Add cute rainbow in browser tab header thingy
+- Something with the countdown isn't makeing sense, it should be handled in the backend only now the countdown resets as we reload, it shouldn't.
+- show peoples avatars
 
+## refactor and clean
+- find a way to refactor into functions we can test - and in a sane structure
+- convert to type script
+- add feature - looking at past months (this can get a but messy)
 

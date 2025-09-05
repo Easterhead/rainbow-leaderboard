@@ -1,5 +1,7 @@
 const config = require('../config');
-const { fetchWattpadData } = require('../wattpad-api');
+const { fetchWattpadData } = require('../backend/wattpad-api');
+
+// This file contains the vercel endpoint api/leaderboard (the path and file names are the magic)
 
 // Use config for cache duration
 const CACHE_DURATION = config.refreshInterval;

@@ -1,5 +1,7 @@
 const axios = require('axios');
-const config = require('./config');
+const config = require('../config');
+
+// This file contains the js functions used by the backend code (in api/leaderboard)
 
 /**
  * Parses text content to find the highest point value
@@ -143,6 +145,11 @@ async function fetchAllRepliesAndReturnAllComments(comments) {
   return allComments;
 }
 
+/**
+ * Fetches leaderboard data from Wattpad API
+ * @returns {Promise<Array>} Array of users with their names and highest points,
+ * sorted by points in descending order
+ */
 async function fetchWattpadData() {
   const url = `https://www.wattpad.com/v5/comments/namespaces/parts/resources/${config.chapterId}/comments?limit=1000`;
   
@@ -192,6 +199,7 @@ module.exports = {
 };
 
 // Only run the fetch function if this file is executed directly
+// this is basically to make it easy to test the function
 if (require.main === module) {
   fetchWattpadData();
 }

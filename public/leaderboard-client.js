@@ -26,8 +26,8 @@ function fetchLeaderboardData() {
     
     // Use local URL in development, production URL in cloud
     const apiUrl = isLocalhost 
-        ? `${config.localApiUrl}/leaderboard`
-        : `${config.apiBaseUrl}/leaderboard`;
+        ? `${client_config.localApiUrl}/leaderboard`
+        : `${client_config.apiBaseUrl}/leaderboard`;
     
     console.log(`Fetching data from: ${apiUrl}`);
     
@@ -193,8 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set the current month from config
     try {
         const currentMonthElement = document.getElementById('current-month');
-        if (currentMonthElement && window.config) {
-            currentMonthElement.textContent = `${config.currentMonth} ${config.currentYear}`;
+        if (currentMonthElement && window.client_config) {
+            currentMonthElement.textContent = `${client_config.currentMonth} ${client_config.currentYear}`;
         } else if (currentMonthElement) {
             // Fallback if config is not available
             currentMonthElement.textContent = 'September 2025';
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Error setting month:', error);
     }
     
-    // Check if we have a saved refresh time
+    // Todo - get this from the backend instead of local storage
     lastRefreshTime = localStorage.getItem('lastRefreshTime');
     
     if (lastRefreshTime) {
