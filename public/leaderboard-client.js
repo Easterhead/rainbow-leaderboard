@@ -43,6 +43,7 @@ function fetchLeaderboardData() {
             return response.json();
         })
         .then(data => {
+
             // Data successfully fetched, update last refresh time
             lastRefreshTime = new Date().getTime();
             
@@ -197,13 +198,14 @@ document.addEventListener('DOMContentLoaded', () => {
             currentMonthElement.textContent = `${client_config.currentMonth} ${client_config.currentYear}`;
         } else if (currentMonthElement) {
             // Fallback if config is not available
-            currentMonthElement.textContent = 'September 2025';
+            currentMonthElement.textContent = 'Error: Couldnt find month!';
         }
     } catch (error) {
         console.error('Error setting month:', error);
     }
     
-    // Todo - get this from the backend instead of local storage
+    // start / continue countdown
+
     lastRefreshTime = localStorage.getItem('lastRefreshTime');
     
     if (lastRefreshTime) {
@@ -223,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
             startCountdownTimer();
             
             // Try to load cached data
-            const cachedData = false; //localStorage.getItem('leaderboardData');
+            const cachedData = localStorage.getItem('leaderboardData');
             if (cachedData) {
                 renderLeaderboard(JSON.parse(cachedData));
             } else {

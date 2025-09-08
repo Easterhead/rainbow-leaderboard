@@ -3,13 +3,6 @@ const { fetchWattpadData } = require('../backend/wattpad-api');
 
 // This file contains the vercel endpoint api/leaderboard (the path and file names are the magic)
 
-// Use config for cache duration
-const CACHE_DURATION = config.refreshInterval;
-
-// Store the data in memory (note: this will reset between function invocations)
-let cachedData = null;
-let lastFetchTime = null;
-
 /**
  * Serverless function handler for /api/leaderboard
  * This can be deployed to platforms like Vercel, Netlify, or AWS Lambda
@@ -31,26 +24,13 @@ module.exports = async (req, res) => {
   }
 
   try {
-    // Parse query parameters - different platforms handle this differently
-    const forceRefresh = req.query?.refresh === 'true';
-    
-    const currentTime = new Date().getTime();
-    const needsRefresh = forceRefresh || 
-                        !cachedData || 
-                        !lastFetchTime || 
-                        (currentTime - lastFetchTime > CACHE_DURATION);
-    
-    if (needsRefresh) {
-      console.log('Fetching fresh data from Wattpad API...');
-      cachedData = await fetchWattpadData();
-      lastFetchTime = currentTime;
-      console.log(`Data refreshed at ${new Date().toLocaleTimeString()}`);
-    } else {
-      console.log('Serving cached data...');
-    }
+    // Fetch fresh data from Wattpad API
+    console.log('Fetching fresh data from Wattpad API...');
+    const leaderboardData = await fetchWattpadData();
+    console.log(`Data fetched at ${new Date().toLocaleTimeString()}`);
     
     // Return the data
-    return res.status(200).json(cachedData);
+    return res.status(200).json(leaderboardData);
   } catch (error) {
     console.error('Error handling request:', error);
     return res.status(500).json({ error: 'Failed to fetch data' });
