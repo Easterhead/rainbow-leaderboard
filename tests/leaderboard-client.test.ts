@@ -1,9 +1,10 @@
 /**
- * Tests for leaderboard-client.js functions
+ * Tests for leaderboard-client.ts functions
  */
 
 // Import the function to test from the source file
-const { calculateCountdownValues } = require('../public/leaderboard-client.js');
+import { calculateCountdownValues } from '../public/leaderboard-client';
+import { CountdownValues } from '../types';
 
 // Test the countdown calculation function
 describe('calculateCountdownValues', () => {

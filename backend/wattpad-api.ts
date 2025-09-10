@@ -1,14 +1,46 @@
-const axios = require('axios');
-const config = require('../config');
+import axios from 'axios';
+// Use relative path that will work after compilation
+import config from '../config';
+// Debug log for config
+console.log('Loaded config at import time:', JSON.stringify(config, null, 2));
+import { LeaderboardEntry, PointsResult } from '../types';
 
-// This file contains the js functions used by the backend code (in api/leaderboard)
+// This file contains the TypeScript functions used by the backend code (in api/leaderboard)
+
+// Define interfaces for our data structures
+interface Comment {
+  name: string;
+  avatar: string;
+  text: string;
+  replyCount: number;
+  commentId: string;
+  isReply?: boolean;
+  parentComment?: string;
+}
+
+interface CommentWithPoints extends Comment {
+  points: number;
+  pointsFound: boolean;
+}
+
+interface WattpadComment {
+  user: {
+    name: string;
+    avatar: string;
+  };
+  text: string;
+  replyCount: number;
+  commentId?: {
+    resourceId: string;
+  };
+}
 
 /**
  * Parses text content to find the highest point value
- * @param {string} text - The text content to parse
- * @returns {object} Object containing the highest points found and whether points were found
+ * @param text - The text content to parse
+ * @returns Object containing the highest points found and whether points were found
  */
-function parsePointsFromText(text) {
+function parsePointsFromText(text: string): PointsResult {
   if (!text) return { maxPoints: 0, pointsFound: false };
   
   let maxPoints = 0;
@@ -41,10 +73,10 @@ function parsePointsFromText(text) {
 
 /**
  * Processes comments to extract points
- * @param {Array} simplifiedComments - Array of simplified comment objects
- * @returns {Array} The same comments with points added
+ * @param simplifiedComments - Array of simplified comment objects
+ * @returns The same comments with points added
  */
-function processCommentsForPoints(simplifiedComments) {
+function processCommentsForPoints(simplifiedComments: Comment[]): CommentWithPoints[] {
   return simplifiedComments.map(comment => {
     const { maxPoints, pointsFound } = parsePointsFromText(comment.text);
     
@@ -58,12 +90,12 @@ function processCommentsForPoints(simplifiedComments) {
 
 /**
  * Creates a leaderboard by finding max points for each unique user
- * @param {Array} commentsWithPoints - Array of comments with points
- * @returns {Array} Leaderboard array with unique users and their max points
+ * @param commentsWithPoints - Array of comments with points
+ * @returns Leaderboard array with unique users and their max points
  */
-function createLeaderboard(commentsWithPoints) {
+function createLeaderboard(commentsWithPoints: CommentWithPoints[]): LeaderboardEntry[] {
   // Map to store the highest points for each user
-  const userPointsMap = new Map();
+  const userPointsMap = new Map<string, LeaderboardEntry>();
   
   // Process each comment to find highest points per user
   commentsWithPoints.forEach(comment => {
@@ -77,7 +109,11 @@ function createLeaderboard(commentsWithPoints) {
     
     // Only update if the new points are higher
     if (points > currentPoints) {
-      userPointsMap.set(name, { name, avatar, points });
+      userPointsMap.set(name, { 
+        name, 
+        points, 
+        avatarUrl: avatar // Map 'avatar' to 'avatarUrl' for consistency
+      });
     }
   });
   
@@ -88,10 +124,10 @@ function createLeaderboard(commentsWithPoints) {
 
 /**
  * Fetches all replies and returns a combined list of original comments and replies
- * @param {Array} comments - Array of original comment objects
- * @returns {Array} Combined array of original comments and their replies
+ * @param comments - Array of original comment objects
+ * @returns Combined array of original comments and their replies
  */
-async function fetchAllRepliesAndReturnAllComments(comments) {
+async function fetchAllRepliesAndReturnAllComments(comments: Comment[]): Promise<Comment[]> {
   let allComments = [...comments]; // Start with the original comments
   
   // Filter comments that have replies
@@ -115,7 +151,7 @@ async function fetchAllRepliesAndReturnAllComments(comments) {
       
       if (repliesResponse.data && repliesResponse.data.comments) {
         // Process each reply
-        const replies = repliesResponse.data.comments.map(reply => {
+        const replies = repliesResponse.data.comments.map((reply: WattpadComment) => {
           return {
             name: reply.user.name,
             avatar: reply.user.avatar,
@@ -136,7 +172,7 @@ async function fetchAllRepliesAndReturnAllComments(comments) {
       // Add a small delay to avoid rate limiting
       await new Promise(resolve => setTimeout(resolve, 300));
     } catch (error) {
-      console.error(`Error fetching replies for comment ${comment.commentId}:`, error.message);
+      console.error(`Error fetching replies for comment ${comment.commentId}:`, error instanceof Error ? error.message : String(error));
       // Continue with the next comment even if this one fails
     }
   }
@@ -147,17 +183,25 @@ async function fetchAllRepliesAndReturnAllComments(comments) {
 
 /**
  * Fetches leaderboard data from Wattpad API
- * @returns {Promise<Array>} Array of users with their names and highest points,
+ * @returns Array of users with their names and highest points,
  * sorted by points in descending order
  */
-async function fetchWattpadData() {
-  const url = `https://www.wattpad.com/v5/comments/namespaces/parts/resources/${config.chapterId}/comments?limit=1000`;
+async function fetchWattpadData(): Promise<LeaderboardEntry[]> {
+  console.log('Starting fetchWattpadData function');
+  console.log('Config:', config);  // Debug log
+  
+  // Hardcoded chapter ID as fallback in case of config issues
+  const chapterId = config.chapterId || "1573385572";
+  
+  const url = `https://www.wattpad.com/v5/comments/namespaces/parts/resources/${chapterId}/comments?limit=1000`;
+  console.log('Fetching from URL:', url);  // Debug log
   
   try {
     const response = await axios.get(url);
+    console.log('Response received. Comment count:', response.data.comments?.length || 0);  // Debug log
     
     // Extract the fields we want from each comment
-    const simplifiedComments = response.data.comments.map(comment => {
+    const simplifiedComments: Comment[] = response.data.comments.map((comment: WattpadComment) => {
       return {
         name: comment.user.name,
         avatar: comment.user.avatar,
@@ -184,22 +228,22 @@ async function fetchWattpadData() {
     
     return leaderboard;
   } catch (error) {
-    console.error('Error:', error.message);
+    console.error('Error:', error instanceof Error ? error.message : String(error));
     return [];
   }
 }
-
-// Export the functions for testing and use in other files
-module.exports = {
-  parsePointsFromText,
-  processCommentsForPoints,
-  createLeaderboard,
-  fetchAllRepliesAndReturnAllComments,
-  fetchWattpadData
-};
 
 // Only run the fetch function if this file is executed directly
 // this is basically to make it easy to test the function
 if (require.main === module) {
   fetchWattpadData();
 }
+
+// Export the functions for testing and use in other files
+export {
+  parsePointsFromText,
+  processCommentsForPoints,
+  createLeaderboard,
+  fetchAllRepliesAndReturnAllComments,
+  fetchWattpadData
+};

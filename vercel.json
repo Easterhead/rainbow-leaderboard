@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "dist/api/**/*.js", "use": "@vercel/node" },
+    { "src": "dist/public/**/*", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/dist/api/$1.js" },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/dist/public/$1" }
+  ],
+  "installCommand": "npm install && npm run build"
+}

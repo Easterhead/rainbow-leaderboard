@@ -2,8 +2,17 @@
  * Rainbow Leaderboard Configuration
  * Update these values at the beginning of each month
  */
-const config = {
+
+interface Config {
+  // Wattpad chapter details
+  chapterId: string;
+  chapterUrl: string;
   
+  // Refresh interval in milliseconds
+  refreshInterval: number;
+}
+
+const config: Config = {
   // Wattpad chapter details
   chapterId: "1573385572",
   chapterUrl: "https://www.wattpad.com/1573385572-rainbow-bookclub-september-2025",
@@ -13,6 +22,4 @@ const config = {
 };
 
 // Export for Node.js (backend)
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = config;
-}
+export default config;

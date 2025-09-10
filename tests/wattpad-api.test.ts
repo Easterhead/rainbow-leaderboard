@@ -1,4 +1,5 @@
-const { parsePointsFromText } = require('../backend/wattpad-api');
+import { parsePointsFromText } from '../backend/wattpad-api';
+import { PointsResult } from '../types';
 
 describe('parsePointsFromText', () => {
   test('should find a single points value', () => {

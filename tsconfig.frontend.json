@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "es2015",
+    "target": "es2015",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "sourceMap": true
+  },
+  "include": [
+    "public/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
