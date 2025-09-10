@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "node dist/server.js",
-    "build": "npm run build:server && npm run build:frontend && npm run copy-assets",
+    "build": "rimraf dist && npm run build:server && npm run build:frontend && npm run copy-assets",
     "build:server": "tsc -p tsconfig.json",
     "build:frontend": "webpack --config webpack.config.js",
     "copy-assets": "powershell -Command \"Copy-Item -Path public/styles.css -Destination dist/public/styles.css -Force; Copy-Item -Path public/index.html -Destination dist/public/index.html -Force\"",
@@ -29,6 +29,7 @@
     "@types/node": "^24.3.1",
     "@vercel/node": "^5.3.21",
     "jest": "^30.1.2",
+    "rimraf": "^6.0.1",
     "ts-jest": "^29.4.1",
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.2",

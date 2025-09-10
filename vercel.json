@@ -6,6 +6,10 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/dist/api/$1.js" },
+    { "src": "/client.bundle.js", "dest": "/dist/public/client.bundle.js" },
+    { "src": "/config.bundle.js", "dest": "/dist/public/config.bundle.js" },
+    { "src": "/styles.css", "dest": "/dist/public/styles.css" },
+    { "src": "/", "dest": "/dist/public/index.html" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/dist/public/$1" }
   ],
