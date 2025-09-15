@@ -110,6 +110,27 @@ function renderLeaderboard(data) {
     
     // Sort data by points (highest first)
     const sortedData = [...data].sort((a, b) => b.points - a.points);
+    
+    // Check for Rainbow achievement (60+ points)
+    const rainbowUsers = sortedData.filter(user => user.points >= 60);
+    
+    // Remove any existing rainbow elements
+    const existingIndicator = document.querySelector('.rainbow-indicator');
+    if (existingIndicator) {
+        existingIndicator.remove();
+    }
+    const existingWrapper = document.querySelector('.leaderboard-content-wrapper');
+    if (existingWrapper) {
+        const table = existingWrapper.querySelector('table');
+        const leaderboard = document.querySelector('.leaderboard');
+        leaderboard.insertBefore(table, existingWrapper);
+        existingWrapper.remove();
+    }
+    const existingFrame = document.querySelector('.rainbow-frame');
+    if (existingFrame) {
+        existingFrame.remove();
+    }
+    
     // Create a rainbow gradient with enough colors for all entries
     const hueIncrement = 360 / (sortedData.length || 1);
 
@@ -148,6 +169,72 @@ function renderLeaderboard(data) {
         // Add the row to the table
         tbody.appendChild(row);
     });
+    
+    // Add Rainbow frame and celebration text if there are qualifying users
+    if (rainbowUsers.length > 0) {
+        setTimeout(() => {
+            const table = document.querySelector('.leaderboard table');
+            const tbody = table.querySelector('tbody');
+            const allRows = tbody.querySelectorAll('tr');
+            
+            // Add celebration text after the last rainbow user
+            let celebrationRow = null;
+            if (rainbowUsers.length < sortedData.length) {
+                celebrationRow = document.createElement('tr');
+                celebrationRow.className = 'rainbow-celebration-row';
+                celebrationRow.innerHTML = `
+                    <td colspan="2" class="rainbow-celebration-text">
+                        🌈 Congratulations! You made Rainbow with 60+ points! 🌈
+                    </td>
+                `;
+                
+                // Insert after the last rainbow user
+                const lastRainbowRow = allRows[rainbowUsers.length - 1];
+                lastRainbowRow.parentNode.insertBefore(celebrationRow, lastRainbowRow.nextSibling);
+            }
+            
+            // Create frame container around just the rainbow section
+            const rainbowFrame = document.createElement('div');
+            rainbowFrame.className = 'rainbow-frame';
+            
+            // Get updated rows list (including the celebration row)
+            const updatedRows = tbody.querySelectorAll('tr');
+            
+            // Calculate how many rows to include in frame (rainbow users + celebration)
+            const frameRowCount = celebrationRow ? rainbowUsers.length + 1 : rainbowUsers.length;
+            
+            // Add CSS classes to identify rainbow rows
+            for (let i = 0; i < rainbowUsers.length; i++) {
+                if (updatedRows[i]) {
+                    updatedRows[i].classList.add('rainbow-user-row');
+                    if (i === 0) updatedRows[i].classList.add('rainbow-first');
+                    if (i === rainbowUsers.length - 1) updatedRows[i].classList.add('rainbow-last');
+                }
+            }
+            
+            // Position the frame using CSS to cover just the rainbow rows
+            rainbowFrame.style.position = 'absolute';
+            rainbowFrame.style.left = '-10px';
+            rainbowFrame.style.right = '-10px';
+            rainbowFrame.style.top = '-8px';
+            rainbowFrame.style.zIndex = '-1';
+            
+            // Calculate frame height based on the rows it should cover
+            const firstRainbowRow = updatedRows[0];
+            const lastFrameRow = updatedRows[frameRowCount - 1];
+            
+            if (firstRainbowRow && lastFrameRow) {
+                const firstRowRect = firstRainbowRow.getBoundingClientRect();
+                const lastRowRect = lastFrameRow.getBoundingClientRect();
+                
+                rainbowFrame.style.height = (lastRowRect.bottom - firstRowRect.top + 8) + 'px'; // Add 8px top, 0px bottom padding
+            }
+            
+            // Add frame to tbody container instead of table container
+            tbody.style.position = 'relative';
+            tbody.appendChild(rainbowFrame);
+        }, 0);
+    }
 }
 
 // Function to update refresh time and start countdown

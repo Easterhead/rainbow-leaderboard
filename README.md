@@ -1,6 +1,6 @@
 # Rainbow Book Club Leaderboard
 
-A web-based leaderboard application for tracking reading points in the Rainbow Book Club Build with vibe coding with claude connet 4.
+A web-based leaderboard application for tracking reading points in the Rainbow Book Club. Built with vibe coding with claude connet 4.
 
 ## Features
 
@@ -36,7 +36,7 @@ This approach runs both the frontend and serverless API functions together, exac
 + Buy domain to get rid of the vercel.app url
 - See if we can make it embed when linked, so it shows the rainbow explosion but smaller
 - show peoples avatars
-- add feature - looking at past months (this can get a but messy)
+- add feature - looking at past months (this can get a bit messy)
 - visually imply if you've made rainbow or not
 
 

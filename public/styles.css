@@ -1,3 +1,176 @@
+/* Rainbow Achievement Section - Frame overlay on specific rows */
+.rainbow-frame {
+    border: 6px solid transparent;
+    border-radius: 15px;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(45deg, 
+                    #ff0000, #ff7f00, #ffff00, #00ff00, 
+                    #0000ff, #4b0082, #8b00ff, #ff0000) border-box;
+    animation: rainbow-border-spin 6s linear infinite;
+    pointer-events: none;
+    margin: 0;
+}
+
+.rainbow-user-row {
+    position: relative;
+}
+
+.rainbow-user-row.rainbow-first td {
+    padding-top: 15px;
+}
+
+.rainbow-user-row.rainbow-last td {
+    padding-bottom: 10px;
+}
+
+.rainbow-celebration-row {
+    background: linear-gradient(135deg, 
+        rgba(255, 0, 0, 0.1) 0%, 
+        rgba(255, 127, 0, 0.1) 14.3%, 
+        rgba(255, 255, 0, 0.1) 28.6%, 
+        rgba(0, 255, 0, 0.1) 42.9%, 
+        rgba(0, 0, 255, 0.1) 57.1%, 
+        rgba(75, 0, 130, 0.1) 71.4%, 
+        rgba(139, 0, 255, 0.1) 85.7%, 
+        rgba(255, 0, 0, 0.1) 100%);
+}
+
+.rainbow-celebration-text {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #4b0082;
+    text-align: center;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    margin: 5px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    animation: bounce-celebration 2s ease-in-out infinite;
+}
+
+/* Hide old rainbow elements */
+.leaderboard-content-wrapper {
+    display: none;
+}
+
+.rainbow-indicator {
+    display: none;
+}
+
+.rainbow-indicator::before {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, 
+        #ff0000, #ff7f00, #ffff00, #00ff00, 
+        #0000ff, #4b0082, #8b00ff, #ff0000);
+    border-radius: 18px;
+    z-index: -1;
+    animation: rainbow-border-spin 6s linear infinite;
+}
+
+.rainbow-celebration-vertical {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 
+        1px 1px 0 #333, 
+        2px 2px 0 #333,
+        3px 3px 0 #333;
+    text-align: center;
+    line-height: 1.2;
+    animation: bounce-celebration 2s ease-in-out infinite;
+}
+
+.leaderboard-content-wrapper table {
+    flex: 1;
+}
+
+/* Original Rainbow Achievement Section - Keep for backward compatibility but hide */
+.rainbow-achievement {
+    display: none;
+}
+
+.rainbow-achievement::before {
+    display: none;
+}
+
+.rainbow-celebration {
+    display: none;
+}
+
+.rainbow-users {
+    display: none;
+}
+
+.rainbow-user {
+    display: inline-block;
+    padding: 2px 8px;
+    margin: 0 2px;
+    background: linear-gradient(45deg, #ff9aa2, #ffb7b2, #ffdac1, #e2f0cb, #b5ead7, #c7ceea);
+    border-radius: 12px;
+    animation: sparkle-user 4s ease-in-out infinite;
+}
+
+/* Rainbow achievement animations */
+@keyframes rainbow-glow {
+    0% {
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    }
+    16.6% {
+        box-shadow: 0 0 20px rgba(255, 127, 0, 0.5);
+    }
+    33.3% {
+        box-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    }
+    66.6% {
+        box-shadow: 0 0 20px rgba(0, 0, 255, 0.5);
+    }
+    83.3% {
+        box-shadow: 0 0 20px rgba(75, 0, 130, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(139, 0, 255, 0.5);
+    }
+}
+
+@keyframes rainbow-border-spin {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+@keyframes bounce-celebration {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes sparkle-user {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
 /* Rainbow themed leaderboard styles */
 body {
     font-family: 'Fredoka One', 'Bubblegum Sans', 'Nunito', sans-serif;
