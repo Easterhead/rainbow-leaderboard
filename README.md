@@ -4,9 +4,10 @@ A web-based leaderboard application for tracking reading points in the Rainbow B
 
 ## Features
 
-- **API-Based Data Collection**: Fetches data from Wattpad's API(all comments on this months chapter) to track reader points
-- **Server-Side Caching**: Implements caching on the server side instead of relying on local storage (this makes is we only do one call every 10 minutes to watt instead of every client (person looking at the board) does it's on.)
-- **Comprehensive Points Detection**: Smart(XD) parsing of various point formats in comments (It's just an ugly ass regex basically)
+- **API-Based Data Collection**: Fetches data from Wattpad's API (all comments on this month's chapter) to track reader points
+- **Serverless Backend**: Uses Vercel serverless functions to handle API calls, avoiding CORS issues and keeping API requests server-side
+- **Client-Side Caching**: Implements local storage caching with 10-minute refresh intervals to reduce API calls
+- **Comprehensive Points Detection**: Smart parsing of various point formats in comments using regex patterns
 
 ## Maintinence
 
