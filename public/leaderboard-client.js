@@ -322,8 +322,9 @@ function refreshDataWhenCountdownEnds(timerState, refreshInterval) {
     }
     showLoadingUI(); // Show loading UI before fetching
     fetchLeaderboardData()
-        .then(renderLeaderboard)
-        .then(() => {
+        .then(data => {
+            renderLeaderboard(data);
+            saveToStorage('leaderboardData', data); // Save fetched data to cache
             const newTimerState = updateRefreshTimeAndStartCountdown(timerState, refreshInterval); // Update refresh time after successful fetch
             hideLoadingUI(); // Hide loading UI after rendering
             return newTimerState;
