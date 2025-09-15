@@ -1,6 +1,6 @@
 # Rainbow Book Club Leaderboard
 
-A web-based leaderboard application for tracking reading points in the Rainbow Book Club Build with vobe coding with claude connet 4.
+A web-based leaderboard application for tracking reading points in the Rainbow Book Club Build with vibe coding with claude connet 4.
 
 ## Features
 
