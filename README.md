@@ -1,6 +1,6 @@
 # Rainbow Book Club Leaderboard
 
-A web-based leaderboard application for tracking reading points in the Rainbow Book Club.
+A web-based leaderboard application for tracking reading points in the Rainbow Book Club Build with vobe coding with claude connet 4.
 
 ## Features
 
@@ -10,7 +10,7 @@ A web-based leaderboard application for tracking reading points in the Rainbow B
 
 ## Maintinence
 
-In config.js we collect all the variables that change, like the id of the chapter and the link to it. These have to be updated every month manually.
+In ./config.js and public/client_config.js we collect all the variables that change, like the id of the chapter and the link to it. These have to be updated every month manually.
 
 ## Where stuff is
 
@@ -34,11 +34,11 @@ This approach runs both the frontend and serverless API functions together, exac
 ## todo
 + Buy domain to get rid of the vercel.app url
 - See if we can make it embed when linked, so it shows the rainbow explosion but smaller
-- Something with the countdown isn't makeing sense, it should be handled in the backend only now the countdown resets as we reload, it shouldn't.
 - show peoples avatars
+- add feature - looking at past months (this can get a but messy)
+- visually imply if you've made rainbow or not
+
 
 ## refactor and clean
-- find a way to refactor into functions we can test - and in a sane structure
-- convert to type script
-- add feature - looking at past months (this can get a but messy)
+- convert to type script (ongoing in separate branch)
 
