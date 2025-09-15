@@ -171,6 +171,25 @@
     }
 }
 
+/* User Avatar Styles */
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    object-fit: cover;
+}
+
+/* Adjust name cell layout for avatars */
+.member-name {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+}
+
 /* Rainbow themed leaderboard styles */
 body {
     font-family: 'Fredoka One', 'Bubblegum Sans', 'Nunito', sans-serif;

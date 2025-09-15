@@ -156,7 +156,13 @@ function renderLeaderboard(data) {
         // Create the cells
         const nameCell = document.createElement('td');
         nameCell.className = 'member-name';
-        nameCell.innerHTML = `${medal}${entry.name}`;
+        
+        // Create avatar element if avatar URL exists
+        const avatarHtml = entry.avatar 
+            ? `<img src="${entry.avatar}" alt="${entry.name}" class="user-avatar" onerror="this.style.display='none'">` 
+            : '';
+        
+        nameCell.innerHTML = `${avatarHtml}${medal}${entry.name}`;
         
         const pointsCell = document.createElement('td');
         pointsCell.className = 'member-points';
