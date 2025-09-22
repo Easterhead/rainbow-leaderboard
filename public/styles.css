@@ -315,13 +315,13 @@ tr:nth-child(7n+5) td {
 }
 
 tr:nth-child(7n+6) td {
-    background-color: rgba(75, 0, 130, 0.25); /* Indigo - proper rainbow order */
-    border-bottom: 3px solid #4b0082;
+    background-color: rgba(255, 20, 147, 0.4); /* Deep pink - vibrant instead of dull indigo */
+    border-bottom: 3px solid #ff1493;
 }
 
 tr:nth-child(7n+7) td {
-    background-color: rgba(255, 20, 147, 0.4); /* Violet/Pink - proper rainbow order */
-    border-bottom: 3px solid #ff1493;
+    background-color: rgba(139, 0, 255, 0.25); /* Purple/Violet - complete the rainbow */
+    border-bottom: 3px solid #8b00ff;
 }
 
 .controls {
