@@ -472,6 +472,24 @@ function initializePage() {
 if (typeof document !== 'undefined') {
     // Initialize the page when DOM is loaded
     document.addEventListener('DOMContentLoaded', initializePage);
+    
+    // Auto-refresh on focus if data is stale (older than 10 minutes)
+    window.addEventListener('focus', () => {
+        const lastRefreshTime = getFromStorage('lastRefreshTime', null);
+        const refreshInterval = 10 * 60 * 1000; // 10 minutes in milliseconds
+        
+        if (lastRefreshTime) {
+            const now = new Date().getTime();
+            const timeSinceRefresh = now - parseInt(lastRefreshTime);
+            
+            // Only reload if it's been more than 10 minutes
+            if (timeSinceRefresh > refreshInterval) {
+                localStorage.removeItem('leaderboardData');
+                localStorage.removeItem('lastRefreshTime');
+                location.reload();
+            }
+        }
+    });
 }
 
 // Export functions for testing
