@@ -290,38 +290,38 @@ tr:nth-child(3) td {
 
 /* Add rainbow colors to all rows, not just the top 3 */
 tr:nth-child(7n+1) td {
-    background-color: rgba(255, 0, 0, 0.15); /* Red */
+    background-color: rgba(255, 0, 0, 0.25); /* Red - increased opacity */
     border-bottom: 3px solid #ff0000;
 }
 
 tr:nth-child(7n+2) td {
-    background-color: rgba(255, 127, 0, 0.15); /* Orange */
+    background-color: rgba(255, 127, 0, 0.25); /* Orange - increased opacity */
     border-bottom: 3px solid #ff7f00;
 }
 
 tr:nth-child(7n+3) td {
-    background-color: rgba(255, 255, 0, 0.15); /* Yellow */
+    background-color: rgba(255, 255, 0, 0.25); /* Yellow - increased opacity */
     border-bottom: 3px solid #ffff00;
 }
 
 tr:nth-child(7n+4) td {
-    background-color: rgba(0, 255, 0, 0.15); /* Green */
+    background-color: rgba(0, 255, 0, 0.25); /* Green - increased opacity */
     border-bottom: 3px solid #00ff00;
 }
 
 tr:nth-child(7n+5) td {
-    background-color: rgba(0, 0, 255, 0.15); /* Blue */
+    background-color: rgba(0, 0, 255, 0.25); /* Blue - increased opacity */
     border-bottom: 3px solid #0000ff;
 }
 
 tr:nth-child(7n+6) td {
-    background-color: rgba(75, 0, 130, 0.15); /* Indigo */
+    background-color: rgba(75, 0, 130, 0.25); /* Indigo - proper rainbow order */
     border-bottom: 3px solid #4b0082;
 }
 
 tr:nth-child(7n+7) td {
-    background-color: rgba(139, 0, 255, 0.15); /* Violet */
-    border-bottom: 3px solid #8b00ff;
+    background-color: rgba(255, 20, 147, 0.4); /* Violet/Pink - proper rainbow order */
+    border-bottom: 3px solid #ff1493;
 }
 
 .controls {

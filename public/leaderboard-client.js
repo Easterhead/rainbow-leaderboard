@@ -138,10 +138,10 @@ function renderLeaderboard(data) {
     sortedData.forEach((entry, index) => {
         const row = document.createElement('tr');
         
-        // Set rainbow background based on position, but with less intensity
-        // Changed from gradient to solid color with lower opacity
+        // Set rainbow background based on position with more vibrant colors
+        // Use higher saturation and opacity for more colorful appearance
         const hue = index * hueIncrement;
-        row.style.background = `hsla(${hue}, 100%, 90%, 0.3)`;
+        row.style.background = `hsla(${hue}, 85%, 80%, 0.5)`;
         
         // Add medal/trophy for top 3
         let medal = '';
@@ -168,9 +168,17 @@ function renderLeaderboard(data) {
         pointsCell.className = 'member-points';
         pointsCell.textContent = entry.points;
         
+        // Add emoji cell for achievement status
+        const emojiCell = document.createElement('td');
+        emojiCell.className = 'member-emoji';
+        emojiCell.style.textAlign = 'center';
+        emojiCell.style.fontSize = '1.2em';
+        emojiCell.textContent = entry.points >= 60 ? '🌈' : '💧';
+        
         // Add cells to the row
         row.appendChild(nameCell);
         row.appendChild(pointsCell);
+        row.appendChild(emojiCell);
         
         // Add the row to the table
         tbody.appendChild(row);
@@ -189,7 +197,7 @@ function renderLeaderboard(data) {
                 celebrationRow = document.createElement('tr');
                 celebrationRow.className = 'rainbow-celebration-row';
                 celebrationRow.innerHTML = `
-                    <td colspan="2" class="rainbow-celebration-text">
+                    <td colspan="3" class="rainbow-celebration-text">
                         🌈 Congratulations! You made Rainbow with 60+ points! 🌈
                     </td>
                 `;
