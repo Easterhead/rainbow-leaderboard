@@ -35,11 +35,14 @@ This approach runs both the frontend and serverless API functions together, exac
 ## todo
 + Buy domain to get rid of the vercel.app url
 - See if we can make it embed when linked, so it shows the rainbow explosion but smaller
-- show peoples avatars
+- [x] show peoples avatars
 - add feature - looking at past months (this can get a bit messy)
-- visually imply if you've made rainbow or not
+- [x] visually imply if you've made rainbow or not
+- [ ] fix cache problem where it suddenly shows week old data. (can't test so have no idea if it worked, time will tell)
+- [ ] it looks like the server goes down in prod and doesn't wake up until we reload the page, can we fix that? (vercel stuff)
+- [ ] Add feature - help with reporting points. Select author and their book from list and select which chapters were read and get a text you can just copy into the comments. Can at a later time be used to let this handle all the points it we want that. (this is big, will need to check which of watt's endpoints support stuff and get the text from the chapter with all the members) (https://www.wattpad.com/apiv2/?m=storytext&id=1564485447 gets all the text for august so that should be easy to get and parse to get all the members of the book club) And https://www.wattpad.com/v4/users/pixelmum/stories/published gets all the books and all chapters for a user
 
 
 ## refactor and clean
-- convert to type script (ongoing in separate branch)
+- convert to type script (ongoing in separate branch - but can't get it to work with vercel so may abandone that)
 
