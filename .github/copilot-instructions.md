@@ -98,6 +98,11 @@ Users with 60+ points get special visual treatment:
 - Backend logic: `tests/wattpad-api.test.js`
 - Frontend utilities: `tests/leaderboard-client.test.js`
 
+**Test Result Checking:**
+- Check `test-results/.last-run.json` to see if Playwright E2E tests passed or failed
+- Look for `"status": "passed"` vs `"status": "failed"` in the JSON file
+- Use this file when unsure about test outcomes from terminal output
+
 Run individual backend functions with: `node backend/wattpad-api.js`
 
 ## External Dependencies
