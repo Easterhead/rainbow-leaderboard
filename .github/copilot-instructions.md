@@ -79,15 +79,24 @@ Users with 60+ points get special visual treatment:
 2. Write minimal code to make tests pass
 3. Refactor while keeping tests green
 
-Tests focus on pure functions:
-- `parsePointsFromText()` with various comment formats
-- `calculateCountdownValues()` for timer logic
-- Backend functions are exportable for Jest testing
+**Testing Strategy by Type:**
+- **Jest Unit Tests**: Pure function logic (no DOM interaction)
+  - `parsePointsFromText()` with various comment formats
+  - `calculateCountdownValues()` for timer logic
+  - Backend API functions and data processing
+  - Export functions from modules using `module.exports` for Jest compatibility
+
+- **Playwright E2E Tests**: HTML interactions, navigation, UI behavior
+  - Button clicks and navigation between pages
+  - Form submissions and user interactions
+  - Visual elements and DOM manipulation
+  - Cross-browser compatibility testing
 
 **Test Organization:**
-- Frontend utilities: `tests/leaderboard-client.test.js`
+- Unit tests: `tests/*.test.js` - Jest for pure functions
+- E2E tests: `tests/e2e/*.spec.js` - Playwright for HTML/UI interactions
 - Backend logic: `tests/wattpad-api.test.js`
-- Export functions from modules using `module.exports` for Jest compatibility
+- Frontend utilities: `tests/leaderboard-client.test.js`
 
 Run individual backend functions with: `node backend/wattpad-api.js`
 

@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node server.js",
     "test-scraper": "node wattpad-scraper.js",
-    "test": "jest"
+    "test": "jest",
+    "test:e2e": "playwright test",
+    "test:all": "npm test && npm run test:e2e"
   },
   "keywords": [
     "leaderboard",
@@ -18,6 +20,8 @@
     "axios": "^1.11.0"
   },
   "devDependencies": {
-    "jest": "^30.1.2"
+    "@playwright/test": "^1.56.1",
+    "jest": "^30.1.2",
+    "jsdom": "^27.0.0"
   }
 }
