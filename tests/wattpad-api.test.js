@@ -87,4 +87,48 @@ Total points for August: 1634`;
     expect(result.pointsFound).toBe(true);
     expect(result.maxPoints).toBe(1634);
   });
+
+  test('should handle "Total points for [month] = [number]" format', () => {
+    const text = "Total points for October = 167";
+    
+    const result = parsePointsFromText(text);
+    
+    expect(result.pointsFound).toBe(true);
+    expect(result.maxPoints).toBe(167);
+  });
+
+  test('should handle various "Total/Final for [month] = [number]" formats', () => {
+    const texts = [
+      'Total points for October = 167',
+      'Total for October = 167',
+      'Final for October = 167',
+      'Total points for October: 167',
+      'Total for October: 167',
+      'total points for october = 167'
+    ];
+    
+    texts.forEach(text => {
+      const result = parsePointsFromText(text);
+      expect(result.pointsFound).toBe(true);
+      expect(result.maxPoints).toBe(167);
+    });
+  });
+
+  test('should handle "Total Monthly Points: [number]" format', () => {
+    const text = "Total Monthly Points: 60";
+    
+    const result = parsePointsFromText(text);
+    
+    expect(result.pointsFound).toBe(true);
+    expect(result.maxPoints).toBe(60);
+  });
+
+  test('should handle "Total Monthly Points: [number]" format with emoji', () => {
+    const text = "Total Monthly Points: 60 🌈";
+    
+    const result = parsePointsFromText(text);
+    
+    expect(result.pointsFound).toBe(true);
+    expect(result.maxPoints).toBe(60);
+  });
 });

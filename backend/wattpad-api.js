@@ -15,7 +15,7 @@ function parsePointsFromText(text) {
   let pointsFound = false;
   
   // A single regex pattern with three capturing groups for different point formats
-  const pointsPattern = /\b(\d+(?:\.\d+)?)\s*(?:points?|pts?)\b|\b(?:final|total)(?:\s+points?)?(?:\s+for\b[^.\n:=]*)?(?:[^.\n]*?[:=]\s*)+(\d+(?:\.\d+)?)(?=[.\n]|$)|^\s*=\s*(\d+(?:\.\d+)?)\s*$/gim;
+  const pointsPattern = /\b(\d+(?:\.\d+)?)\s*(?:points?|pts?)\b|\b(?:final|total)(?:\s+points?)?(?:\s+for\b[^.\n:=]*)?(?:[^.\n]*?[:=]\s*)+(\d+(?:\.\d+)?)(?=\D|$)|^\s*=\s*(\d+(?:\.\d+)?)\s*$/gim;
   
   // Match all instances of the pattern
   const matches = [...text.matchAll(pointsPattern)];
