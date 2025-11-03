@@ -5,7 +5,7 @@
 /**
  * Adds a chapter to the selected chapters list
  */
-function addSelectedChapter(chapterTitle, bookTitle, authorUsername, updateDisplayFn = updateSelectedChaptersDisplay, selectedChaptersArray) {
+function addSelectedChapter(chapterTitle, bookTitle, authorUsername, updateDisplayFn = updateSelectedChaptersDisplay, selectedChaptersArray, authorPointsGroup = null) {
     // Check if chapter is already selected to avoid duplicates
     const exists = selectedChaptersArray.some(chapter => 
         chapter.chapterTitle === chapterTitle && 
@@ -14,11 +14,18 @@ function addSelectedChapter(chapterTitle, bookTitle, authorUsername, updateDispl
     );
     
     if (!exists) {
-        selectedChaptersArray.push({
+        const chapterData = {
             chapterTitle,
             bookTitle,
             authorUsername
-        });
+        };
+        
+        // Add authorPointsGroup if provided
+        if (authorPointsGroup) {
+            chapterData.authorPointsGroup = authorPointsGroup;
+        }
+        
+        selectedChaptersArray.push(chapterData);
         updateDisplayFn();
     }
 }
@@ -71,6 +78,7 @@ function removeSelectedChapter(index, updateDisplayFn = updateSelectedChaptersDi
 // Points groups and their values
 const pointsGroups = {
     "botm": 6,
+    "birthday": 6,
     "event": 5, 
     "mods": 4,
     "rainbow": 3,
@@ -258,7 +266,7 @@ function renderUserList() {
 /**
  * Handles chapter selection event
  */
-function handleChapterSelection(chapterTitle, bookTitle, authorUsername) {
+function handleChapterSelection(chapterTitle, bookTitle, authorUsername, isBirthdayRead = false) {
     // Get the selected user container to access the selectedChapters array
     const selectedUserContainer = document.querySelector('.selected-user-container');
     if (!selectedUserContainer || !selectedUserContainer.selectedChapters) {
@@ -268,8 +276,18 @@ function handleChapterSelection(chapterTitle, bookTitle, authorUsername) {
     
     const selectedChapters = selectedUserContainer.selectedChapters;
     
+    // Find the author's points group
+    const author = mockAuthors.find(a => a.username === authorUsername);
+    if (!author) {
+        console.error('Author not found:', authorUsername);
+        return;
+    }
+    
+    // Determine which points group to use
+    const authorPointsGroup = isBirthdayRead ? 'birthday' : author.pointsGroup;
+    
     // Add chapter to selected chapters list
-    addSelectedChapter(chapterTitle, bookTitle, authorUsername, () => updateSelectedChaptersDisplay(selectedChapters), selectedChapters);
+    addSelectedChapter(chapterTitle, bookTitle, authorUsername, () => updateSelectedChaptersDisplay(selectedChapters), selectedChapters, authorPointsGroup);
     
     // Get the selected user
     const selectedUserInfo = document.querySelector('.selected-user-info');
@@ -290,19 +308,12 @@ function handleChapterSelection(chapterTitle, bookTitle, authorUsername) {
         return;
     }
 
-    // Find the author's points group
-    const author = mockAuthors.find(a => a.username === authorUsername);
-    if (!author) {
-        console.error('Author not found:', authorUsername);
-        return;
-    }
-
     // Create selected chapter object for report comment
     const selectedChapter = {
         chapterTitle,
         bookTitle,
         authorUsername,
-        authorPointsGroup: author.pointsGroup
+        authorPointsGroup
     };
 
     // Update the report comment
@@ -345,11 +356,19 @@ function populateChapterList(bookTitle, authorUsername) {
         
         chapterItem.innerHTML = `
             <div class="chapter-title">${chapterTitle}</div>
+            <label class="birthday-label">
+                <input type="checkbox" class="birthday-checkbox">
+                Birthday read 🎂
+            </label>
         `;
         
         // Add click event listener
-        chapterItem.addEventListener('click', () => {
-            handleChapterSelection(chapterTitle, bookTitle, authorUsername);
+        chapterItem.addEventListener('click', (event) => {
+            // Check if the birthday checkbox is checked
+            const birthdayCheckbox = chapterItem.querySelector('.birthday-checkbox');
+            const isBirthdayRead = birthdayCheckbox ? birthdayCheckbox.checked : false;
+            
+            handleChapterSelection(chapterTitle, bookTitle, authorUsername, isBirthdayRead);
         });
         
         chapterItems.appendChild(chapterItem);
@@ -473,23 +492,69 @@ function populateAuthorDropdown() {
 /**
  * Builds the report comment string for a user
  */
-function buildReportComment(user, selectedChapter = null) {
-    if (!selectedChapter) {
+function buildReportComment(user, selectedChapters = null) {
+    if (!selectedChapters) {
         // For now, just show the user's current points in the format:
         // "Total: [points] = [points] points"
         return `Total: ${user.points} = ${user.points} points`;
     }
     
-    // Calculate new total with chapter points
-    const chapterPoints = pointsGroups[selectedChapter.authorPointsGroup];
-    const newTotal = user.points + chapterPoints;
+    // Handle both single chapter object and array of chapters
+    const chaptersArray = Array.isArray(selectedChapters) ? selectedChapters : [selectedChapters];
     
-    // Build the formatted comment
-    const comment = `Total: ${user.points} + 1x${chapterPoints} = ${newTotal}
-
-${selectedChapter.bookTitle} by @${selectedChapter.authorUsername}
-${selectedChapter.authorPointsGroup} ${chapterPoints} points
-1 (${selectedChapter.chapterTitle})`;
+    // Group chapters by book (using bookTitle + authorUsername as key)
+    const bookGroups = {};
+    chaptersArray.forEach(chapter => {
+        const key = `${chapter.bookTitle}|||${chapter.authorUsername}`;
+        if (!bookGroups[key]) {
+            bookGroups[key] = {
+                bookTitle: chapter.bookTitle,
+                authorUsername: chapter.authorUsername,
+                authorPointsGroup: chapter.authorPointsGroup,
+                chapters: []
+            };
+        }
+        bookGroups[key].chapters.push(chapter);
+    });
+    
+    // Build the total calculation line
+    const totalParts = [];
+    let grandTotal = user.points;
+    
+    Object.values(bookGroups).forEach(group => {
+        const chapterCount = group.chapters.length;
+        const chapterPoints = pointsGroups[group.authorPointsGroup];
+        const bookTotal = chapterCount * chapterPoints;
+        totalParts.push(`${chapterCount}x${chapterPoints}`);
+        grandTotal += bookTotal;
+    });
+    
+    const totalLine = `Total: ${user.points} + ${totalParts.join(' + ')} = ${grandTotal}`;
+    
+    // Build individual book paragraphs
+    const bookParagraphs = Object.values(bookGroups).map(group => {
+        const chapterCount = group.chapters.length;
+        const chapterPoints = pointsGroups[group.authorPointsGroup];
+        const bookTotal = chapterCount * chapterPoints;
+        
+        // Build chapter list
+        let chapterTitles;
+        if (chapterCount > 2) {
+            const firstChapter = group.chapters[0];
+            const lastChapter = group.chapters[group.chapters.length - 1];
+            chapterTitles = `${firstChapter.chapterTitle} - ${lastChapter.chapterTitle}`;
+        } else {
+            chapterTitles = group.chapters.map(ch => ch.chapterTitle).join(', ');
+        }
+        
+        return `${group.bookTitle} by @${group.authorUsername}
+${group.authorPointsGroup} ${chapterPoints} points
+${chapterCount} (${chapterTitles})
+${chapterCount} x ${chapterPoints} = ${bookTotal} points`;
+    });
+    
+    // Combine total line and book paragraphs
+    const comment = totalLine + '\n\n' + bookParagraphs.join('\n\n');
     
     return comment;
 }

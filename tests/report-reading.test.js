@@ -51,7 +51,206 @@ describe('buildReportComment', () => {
 
 Mirror, Mirror by @CemeteryFaerie
 rainbow 3 points
-1 (Chapter 1: The Reflection)`;
+1 (Chapter 1: The Reflection)
+1 x 3 = 3 points`;
+    
+    expect(result).toBe(expected);
+  });
+
+  test('should build correct report comment with multiple chapters from same book', () => {
+    const user = {
+      username: "TestUser",
+      avatar: "test-avatar.jpg",
+      points: 85
+    };
+    
+    const selectedChapters = [
+      {
+        chapterTitle: "Chapter 1: The Reflection",
+        bookTitle: "Mirror, Mirror",
+        authorUsername: "CemeteryFaerie",
+        authorPointsGroup: "rainbow"
+      },
+      {
+        chapterTitle: "Chapter 2: The Fall",
+        bookTitle: "Mirror, Mirror",
+        authorUsername: "CemeteryFaerie",
+        authorPointsGroup: "rainbow"
+      }
+    ];
+    
+    const result = buildReportComment(user, selectedChapters);
+    
+    const expected = `Total: 85 + 2x3 = 91
+
+Mirror, Mirror by @CemeteryFaerie
+rainbow 3 points
+2 (Chapter 1: The Reflection, Chapter 2: The Fall)
+2 x 3 = 6 points`;
+    
+    expect(result).toBe(expected);
+  });
+
+  test('should use range format for more than 2 chapters from same book', () => {
+    const user = {
+      username: "TestUser",
+      avatar: "test-avatar.jpg",
+      points: 85
+    };
+    
+    const selectedChapters = [
+      {
+        chapterTitle: "Chapter 1: The Reflection",
+        bookTitle: "Mirror, Mirror",
+        authorUsername: "CemeteryFaerie",
+        authorPointsGroup: "rainbow"
+      },
+      {
+        chapterTitle: "Chapter 2: Shattered Glass",
+        bookTitle: "Mirror, Mirror",
+        authorUsername: "CemeteryFaerie",
+        authorPointsGroup: "rainbow"
+      },
+      {
+        chapterTitle: "Chapter 3: Through the Looking Glass",
+        bookTitle: "Mirror, Mirror",
+        authorUsername: "CemeteryFaerie",
+        authorPointsGroup: "rainbow"
+      }
+    ];
+    
+    const result = buildReportComment(user, selectedChapters);
+    
+    const expected = `Total: 85 + 3x3 = 94
+
+Mirror, Mirror by @CemeteryFaerie
+rainbow 3 points
+3 (Chapter 1: The Reflection - Chapter 3: Through the Looking Glass)
+3 x 3 = 9 points`;
+    
+    expect(result).toBe(expected);
+  });
+
+  test('should handle multiple books from different authors', () => {
+    const user = {
+      username: "TestUser",
+      avatar: "test-avatar.jpg",
+      points: 85
+    };
+    
+    const selectedChapters = [
+      {
+        chapterTitle: "Chapter 1: The Reflection",
+        bookTitle: "Mirror, Mirror",
+        authorUsername: "CemeteryFaerie",
+        authorPointsGroup: "rainbow"
+      },
+      {
+        chapterTitle: "Chapter 2: Shattered Glass",
+        bookTitle: "Mirror, Mirror",
+        authorUsername: "CemeteryFaerie",
+        authorPointsGroup: "rainbow"
+      },
+      {
+        chapterTitle: "Chapter 1: First Day",
+        bookTitle: "The Magic Academy",
+        authorUsername: "erifnidne",
+        authorPointsGroup: "mods"
+      }
+    ];
+    
+    const result = buildReportComment(user, selectedChapters);
+    
+    const expected = `Total: 85 + 2x3 + 1x4 = 95
+
+Mirror, Mirror by @CemeteryFaerie
+rainbow 3 points
+2 (Chapter 1: The Reflection, Chapter 2: Shattered Glass)
+2 x 3 = 6 points
+
+The Magic Academy by @erifnidne
+mods 4 points
+1 (Chapter 1: First Day)
+1 x 4 = 4 points`;
+    
+    expect(result).toBe(expected);
+  });
+
+  test('should handle multiple books from the same author', () => {
+    const user = {
+      username: "TestUser",
+      avatar: "test-avatar.jpg",
+      points: 85
+    };
+    
+    const selectedChapters = [
+      {
+        chapterTitle: "Chapter 1: The Reflection",
+        bookTitle: "Mirror, Mirror",
+        authorUsername: "CemeteryFaerie",
+        authorPointsGroup: "rainbow"
+      },
+      {
+        chapterTitle: "Chapter 2: Shattered Glass",
+        bookTitle: "Mirror, Mirror",
+        authorUsername: "CemeteryFaerie",
+        authorPointsGroup: "rainbow"
+      },
+      {
+        chapterTitle: "Prologue",
+        bookTitle: "Once in A Blue Moon",
+        authorUsername: "CemeteryFaerie",
+        authorPointsGroup: "rainbow"
+      }
+    ];
+    
+    const result = buildReportComment(user, selectedChapters);
+    
+    const expected = `Total: 85 + 2x3 + 1x3 = 94
+
+Mirror, Mirror by @CemeteryFaerie
+rainbow 3 points
+2 (Chapter 1: The Reflection, Chapter 2: Shattered Glass)
+2 x 3 = 6 points
+
+Once in A Blue Moon by @CemeteryFaerie
+rainbow 3 points
+1 (Prologue)
+1 x 3 = 3 points`;
+    
+    expect(result).toBe(expected);
+  });
+
+  test('should handle birthday reading with 6 points', () => {
+    const user = {
+      username: "TestUser",
+      avatar: "test-avatar.jpg",
+      points: 85
+    };
+    
+    const selectedChapters = [
+      {
+        chapterTitle: "Chapter 1: The Reflection",
+        bookTitle: "Mirror, Mirror",
+        authorUsername: "CemeteryFaerie",
+        authorPointsGroup: "birthday"
+      },
+      {
+        chapterTitle: "Chapter 2: Shattered Glass",
+        bookTitle: "Mirror, Mirror",
+        authorUsername: "CemeteryFaerie",
+        authorPointsGroup: "birthday"
+      }
+    ];
+    
+    const result = buildReportComment(user, selectedChapters);
+    
+    const expected = `Total: 85 + 2x6 = 97
+
+Mirror, Mirror by @CemeteryFaerie
+birthday 6 points
+2 (Chapter 1: The Reflection, Chapter 2: Shattered Glass)
+2 x 6 = 12 points`;
     
     expect(result).toBe(expected);
   });
@@ -228,6 +427,7 @@ describe('updateSelectedChaptersDisplay', () => {
 describe('pointsGroups', () => {
   test('should have all required point groups', () => {
     expect(pointsGroups).toHaveProperty('botm', 6);
+    expect(pointsGroups).toHaveProperty('birthday', 6);
     expect(pointsGroups).toHaveProperty('event', 5);
     expect(pointsGroups).toHaveProperty('mods', 4);
     expect(pointsGroups).toHaveProperty('rainbow', 3);
