@@ -5,8 +5,8 @@
 const config = {
   
   // Wattpad chapter details
-  chapterId: "1586473648",
-  chapterUrl: "https://www.wattpad.com/1586473648-rainbow-bookclub-november-2025",
+  chapterId: "1592694062",
+  chapterUrl: "https://www.wattpad.com/1592694062-rainbow-bookclub-december-2025",
   
   // Refresh interval in milliseconds (10 minutes)
   refreshInterval: 10 * 60 * 1000
