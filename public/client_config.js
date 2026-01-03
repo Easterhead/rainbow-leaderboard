@@ -4,8 +4,8 @@
  */
 window.client_config = {
   // Dates/content
-  currentMonth: "December",
-  currentYear: "2025",
+  currentMonth: "January",
+  currentYear: "2026",
 
   // API endpoints
   apiBaseUrl: "https://rainbow-leaderboard.vercel.app/api",
