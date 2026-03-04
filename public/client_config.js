@@ -4,7 +4,7 @@
  */
 window.client_config = {
   // Dates/content
-  currentMonth: "February",
+  currentMonth: "March",
   currentYear: "2026",
 
   // API endpoints
